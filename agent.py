@@ -27,4 +27,11 @@ class Agent:
         probs = Dense(self.n_actions, activation='softmax')
         values = Dense(1, activation='linear')(dense2)
 
+        def custom_loss(y_true, y_pred):
+            out = K.clip(y_pred, 1e-8, 1-1e-8)
+            log_likelihood = y_true* K.log(out)
+
+            return K.sum(-log_likelihood * delta)
+
+
 

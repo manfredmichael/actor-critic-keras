@@ -1,7 +1,7 @@
 import numpy as np
 
 from tensorflow.keras import backend as K
-from tensorflow.keras.layers import Activation, Dense, Input
+from tensorflow.keras.layers import Dense, Input
 from tensorflow.models import Model
 from tensorflow.keras.optimizers import Adam
 
@@ -14,3 +14,17 @@ class Agent:
         self.input_dims = input_dims
         self.fc1_dims = fc1_size
         self.fc2_dims = fc2_size
+
+        self.actor, self.critic, self.policy = self.build_actor_critic_networks()
+        self.action_space = [i for i in range(self.n_actions)]
+
+    def build_actor_critic_networks(self):
+        input_ = Input(shape=[self.input_dims])
+        delta = Input(shape=[1])
+        dense1 = Dense(self.fc1_dims, activation='relu')(input_)
+        dense2 = Dense(self.fc2_dims, activation='relu')(dense1)
+
+        probs = Dense(self.n_actions, activation='softmax')
+        values = Dense(1, activation='linear')(dense2)
+
+

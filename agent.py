@@ -5,6 +5,9 @@ from tensorflow.keras.layers import Dense, Input
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
 
+import tensorflow as tf
+tf.compat.v1.disable_eager_execution()
+
 from utils import LearningReport
 
 class Agent:
@@ -29,16 +32,16 @@ class Agent:
         dense1 = Dense(self.fc1_dims, activation='relu')(input_)
         dense2 = Dense(self.fc2_dims, activation='relu')(dense1)
 
-        probs = Dense(self.n_actions, activation='softmax')
+        probs = Dense(self.n_actions, activation='softmax')(dense2)
         values = Dense(1, activation='linear')(dense2)
 
         def custom_loss(y_true, y_pred):
             out = K.clip(y_pred, 1e-8, 1-1e-8)
-            log_likelihood = y_true* K.log(out)
+            log_likelihood = y_true * K.log(out)
 
-            return K.sum(-log_likelihood * delta)
+            return K.sum(-1 * log_likelihood * delta)
 
-        actor = Model(inputs=[input_, delta], ouputs=[probs])
+        actor = Model(inputs=[input_, delta], outputs=[probs])
         actor.compile(optimizer=Adam(lr=self.alpha), loss=custom_loss)
 
         critic = Model(inputs=[input_], outputs=[values])
@@ -69,6 +72,6 @@ class Agent:
 
         actions = np.zeros([1, self.n_actions])
         actions[np.arange(1), action] = 1.0
-
+        
         self.actor.fit([state, delta], actions, verbose=0)
         self.critic.fit(state, target, verbose=0)

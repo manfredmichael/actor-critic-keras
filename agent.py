@@ -14,6 +14,7 @@ class Agent:
         self.input_dims = input_dims
         self.fc1_dims = fc1_size
         self.fc2_dims = fc2_size
+        self.n_actions = n_actions
 
         self.actor, self.critic, self.policy = self.build_actor_critic_networks()
         self.action_space = [i for i in range(self.n_actions)]

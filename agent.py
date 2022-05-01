@@ -5,6 +5,8 @@ from tensorflow.keras.layers import Dense, Input
 from tensorflow.models import Model
 from tensorflow.keras.optimizers import Adam
 
+from utils import LearningReport
+
 class Agent:
     def __init__(self, alpha, beta, gamma=0.99, n_actions=4, fc1_size=1024, fc2_size=512,
                  input_dims=8):
@@ -15,6 +17,8 @@ class Agent:
         self.fc1_dims = fc1_size
         self.fc2_dims = fc2_size
         self.n_actions = n_actions
+
+        self.report = LearningReport()
 
         self.actor, self.critic, self.policy = self.build_actor_critic_networks()
         self.action_space = [i for i in range(self.n_actions)]
@@ -66,4 +70,3 @@ class Agent:
 
         self.actor.fit([state, delta], actions, verbose=0)
         self.critic.fit(state, target, verbose=0)
-

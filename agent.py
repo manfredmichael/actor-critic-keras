@@ -42,3 +42,10 @@ class Agent:
         policy = Model(inputs=[input_], outputs=[probs])
 
         return actor, critic, policy
+
+    def choose_action(self, observation):
+        state = np.expand_dims(observation, axis=0)
+        probabilities = self.policy.predict(state)[0]
+        action = np.random.choice(self.action_space, p=probabilities)
+
+        return action

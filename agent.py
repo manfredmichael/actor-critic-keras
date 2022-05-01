@@ -50,3 +50,20 @@ class Agent:
         action = np.random.choice(self.action_space, p=probabilities)
 
         return action
+
+    def learn(self, state, action, reward, state_, done):
+        state = np.expand_dims(state, axis=0)
+        state_ = np.expand_dims(state_, axis=0)
+
+        critic_value = self.critic.predict(state)
+        critic_value_ = self.critic.predict(state_)
+
+        target = reward + self.gamma * critic_value_  * (1-int(done))
+        delta = target - critic_value
+
+        actions = np.zeros([1, self.n_actions])
+        actions[np.arange(1), action] = 1.0
+
+        self.actor.fit([state, delta], actions, verbose=0)
+        self.critic.fit(state, target, verbose=0)
+

@@ -9,6 +9,7 @@ class LearningReport:
         self.text_space = text_space
         self.episode_rewards = deque(maxlen=average_reward_episode)
         self.episode_reward = 0
+        self.episode_counter = 0
         
         filename = filename + datetime.datetime.now().strftime(' (%d-%m-%y %H:%M:%S)')
         self.writer = tf.summary.create_file_writer(logdir='logs/{}'.format(filename))
@@ -20,11 +21,14 @@ class LearningReport:
     def add_to_report(self, reward):
         self.episode_reward += reward
 
-    def report_episode(self, episode, epsilon):
-        self.episode_rewards.append(self.episode_reward)
-        self.write_episode_report(episode, epsilon)
+    def report_episode(self, epsilon=0, count_episode=True):
+        if count_episode:
+            self.episode_counter += 1
 
-        episode    = self.format_report('episode: ' + str(episode))
+        self.episode_rewards.append(self.episode_reward)
+        self.write_episode_report(self.episode_counter, epsilon)
+
+        episode    = self.format_report('episode: ' + str(self.episode_counter))
         reward     = self.format_report('reward: ' + str(self.episode_reward))
         reward_avg = self.format_report('reward avg: ' + '{:.2f}'.format(np.mean(self.episode_rewards)))
         epsilon    = self.format_report('epsilon: ' + '{:.2f}'.format(epsilon))
@@ -34,8 +38,8 @@ class LearningReport:
         
         return report
         
-    def write_episode_report(self, episode, epsilon):
+    def write_episode_report(self, epsilon):
         with self.writer.as_default():
-            tf.summary.scalar('Episode_reward', self.episode_reward, step=episode)
-            tf.summary.scalar('Running_avg_reward', np.mean(self.episode_rewards), step=episode)
-            tf.summary.scalar('Epsilon', epsilon, step=episode)
+            tf.summary.scalar('Episode_reward', self.episode_reward, step=self.episode_counter)
+            tf.summary.scalar('Running_avg_reward', np.mean(self.episode_rewards), step=self.episode_counter)
+            tf.summary.scalar('Epsilon', epsilon, step=self.episode_counter)

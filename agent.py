@@ -56,6 +56,8 @@ class Agent:
         return action
 
     def learn(self, state, action, reward, state_, done):
+        self.report.add_reward(reward)
+
         state = np.expand_dims(state, axis=0)
         state_ = np.expand_dims(state_, axis=0)
 

@@ -40,3 +40,5 @@ class Agent:
         critic.compile(optimizer=Adam(lr=self.alpha), loss="mse")
 
         policy = Model(inputs=[input_], outputs=[probs])
+
+        return actor, critic, policy

@@ -35,3 +35,11 @@ class Agent:
 
         actor = Model(inputs=[input_, delta], ouputs=[probs])
         actor.compile(optimizer=Adam(lr=self.alpha), loss=custom_loss)
+
+        critic = Model(inputs=[input_], outputs=[values])
+        critic.compile(optimizer=Adam(lr=self.alpha), loss=custom_loss)
+
+
+
+
+

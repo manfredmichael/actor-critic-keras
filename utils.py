@@ -46,4 +46,5 @@ class LearningReport:
         with self.writer.as_default():
             tf.summary.scalar('Episode_reward', self.episode_reward, step=self.episode_counter)
             tf.summary.scalar('Running_avg_reward', np.mean(self.episode_rewards), step=self.episode_counter)
-            tf.summary.scalar('Epsilon', epsilon, step=self.episode_counter)
+            if epsilon:
+                tf.summary.scalar('Epsilon', epsilon, step=self.episode_counter)

@@ -18,7 +18,7 @@ class LearningReport:
         white_space = ''.join([' ' for i in range(self.text_space - len(text))])
         return text + white_space
 
-    def add_to_report(self, reward):
+    def add_reward(self, reward):
         self.episode_reward += reward
 
     def report_episode(self, epsilon=0, count_episode=True):
@@ -26,7 +26,7 @@ class LearningReport:
             self.episode_counter += 1
 
         self.episode_rewards.append(self.episode_reward)
-        self.write_episode_report(self.episode_counter, epsilon)
+        self.write_episode_report(epsilon)
 
         episode    = self.format_report('episode: ' + str(self.episode_counter))
         reward     = self.format_report('reward: ' + str(self.episode_reward))

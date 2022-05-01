@@ -33,5 +33,5 @@ class Agent:
 
             return K.sum(-log_likelihood * delta)
 
-
-
+        actor = Model(inputs=[input_, delta], ouputs=[probs])
+        actor.compile(optimizer=Adam(lr=self.alpha), loss=custom_loss)

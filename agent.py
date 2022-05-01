@@ -2,7 +2,7 @@ import numpy as np
 
 from tensorflow.keras import backend as K
 from tensorflow.keras.layers import Dense, Input
-from tensorflow.models import Model
+from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
 
 from utils import LearningReport

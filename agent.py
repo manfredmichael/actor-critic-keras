@@ -37,9 +37,4 @@ class Agent:
         actor.compile(optimizer=Adam(lr=self.alpha), loss=custom_loss)
 
         critic = Model(inputs=[input_], outputs=[values])
-        critic.compile(optimizer=Adam(lr=self.alpha), loss=custom_loss)
-
-
-
-
-
+        critic.compile(optimizer=Adam(lr=self.alpha), loss="mse")

@@ -21,7 +21,7 @@ class LearningReport:
     def add_reward(self, reward):
         self.episode_reward += reward
 
-    def report_episode(self, epsilon=0, count_episode=True):
+    def report_episode(self, epsilon=None, count_episode=True):
         if count_episode:
             self.episode_counter += 1
 
@@ -31,7 +31,11 @@ class LearningReport:
         episode    = self.format_report('episode: ' + str(self.episode_counter))
         reward     = self.format_report('reward: ' + str(self.episode_reward))
         reward_avg = self.format_report('reward avg: ' + '{:.2f}'.format(np.mean(self.episode_rewards)))
-        epsilon    = self.format_report('epsilon: ' + '{:.2f}'.format(epsilon))
+
+        if epsilon:
+            epsilon = self.format_report('epsilon: ' + '{:.2f}'.format(epsilon))
+        else:
+            epsilon = ""
 
         report = episode + reward + reward_avg + epsilon
         self.episode_reward = 0

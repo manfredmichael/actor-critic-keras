@@ -39,7 +39,7 @@ class Agent:
             out = K.clip(y_pred, 1e-8, 1-1e-8)
             log_likelihood = y_true * K.log(out)
 
-            return K.sum(-1 * log_likelihood * delta)
+            return K.sum(-log_likelihood * delta)
 
         actor = Model(inputs=[input_, delta], outputs=[probs])
         actor.compile(optimizer=Adam(lr=self.alpha), loss=custom_loss)
